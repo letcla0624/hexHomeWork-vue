@@ -5,7 +5,7 @@ import ProductsView from "@/views/week2/ProductsView.vue";
 
 const routes = [
   {
-    path: "/week1",
+    path: "/",
     name: "week1/getProducts",
     component: GetProducts,
   },
