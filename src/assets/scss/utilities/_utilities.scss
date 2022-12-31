@@ -1,0 +1,101 @@
+$utilities: map-merge(
+  $utilities,
+  (
+    "line-height":
+      map-merge(
+        map-get($utilities, "line-height"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "line-height"), "values"),
+              (
+                "xl": 2.5,
+              )
+            ),
+        )
+      ),
+    "rounded":
+      map-merge(
+        map-get($utilities, "rounded"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "rounded"), "values"),
+              (
+                "lg": 1rem,
+                "xl": 2rem,
+              )
+            ),
+        )
+      ),
+    "background-color":
+      map-merge(
+        map-get($utilities, "background-color"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "background-color"), "values"),
+              (
+                
+              )
+            ),
+        )
+      ),
+    "letter-spacing":
+      (
+        responsive: true,
+        property: letter-spacing,
+        class: ls,
+        values: (
+          xs: -0.05em,
+          sm: -0.025em,
+          normal: 0,
+          md: 0.025em,
+          lg: 0.05em,
+          xl: 0.1em,
+        ),
+      ),
+    "border-color":
+      (
+        responsive: true,
+        property: border-color,
+        class: border,
+        values:
+          map-merge(
+            $theme-colors,
+            (
+              
+            )
+          ),
+      ),
+      "font-size":
+      map-merge(
+        map-get($utilities, "font-size"),
+        (
+          responsive: true,
+        )
+      ),
+    "font-weight":
+      map-merge(
+        map-get($utilities, "font-weight"),
+        (
+          responsive: true,
+        )
+      ),
+    "color":
+      (
+        property: color,
+        class: text,
+        local-vars: (
+          "text-opacity": 1,
+        ),
+        values:
+          map-merge(
+            $utilities-text-colors,
+            (
+              
+            )
+          ),
+      )
+  )
+);
