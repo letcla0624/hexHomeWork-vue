@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import GetProducts from "@/views/week1/GetProducts.vue";
 import HomeView from "@/views/week2/HomeView.vue";
 import ProductsView from "@/views/week2/ProductsView.vue";
@@ -27,7 +27,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
   linkActiveClass: "active",
 });
