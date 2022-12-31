@@ -44,7 +44,7 @@ const logOut = async () => {
 
 onMounted(() => {
   const AUTH_TOKEN = document.cookie.replace(
-    /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+    /(?:(?:^|.*;\s*)hexHomeWorkToken\s*=\s*([^;]*).*$)|^.*$/,
     "$1"
   );
   axios.defaults.headers.common.Authorization = AUTH_TOKEN;
