@@ -37,6 +37,10 @@ const logOut = async () => {
     const res = await axios.post(`${import.meta.env.VITE_APP_API}/logout`);
     alert(res.data.message);
     router.push(backToHome);
+
+    // 刪除 token
+    document.cookie =
+      "hexHomeWorkToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
   } catch (err) {
     alert(err.response.data.message);
   }

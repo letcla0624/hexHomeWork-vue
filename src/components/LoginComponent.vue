@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { reactive, inject } from "vue";
+import { reactive, inject, onMounted } from "vue";
 
 const axios = inject("axios");
 const router = useRouter();
@@ -26,6 +26,16 @@ const login = async () => {
     alert(err.response.data.message);
   }
 };
+
+onMounted(() => {
+  // 判斷有沒有token
+  const token = `${document.cookie}`;
+  if (token) {
+    router.push({ name: "week2/products" });
+  } else {
+    router.push({ name: "week2" });
+  }
+});
 </script>
 
 <template>
