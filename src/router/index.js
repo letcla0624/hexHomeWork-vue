@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import NProgress from "nprogress";
 import GetProducts from "@/views/week1/GetProducts.vue";
 import HomeView from "@/views/week2/HomeView.vue";
 import ProductsView from "@/views/week2/ProductsView.vue";
@@ -30,6 +31,14 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   linkActiveClass: "active",
+});
+
+router.beforeEach((_to, _from, next) => {
+  NProgress.start();
+  next();
+});
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;

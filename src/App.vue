@@ -16,4 +16,8 @@ body {
 .container {
   height: calc(100vh - 56px);
 }
+#nprogress .bar {
+  background: var(--bs-primary) !important;
+  height: 6px !important;
+}
 </style>
