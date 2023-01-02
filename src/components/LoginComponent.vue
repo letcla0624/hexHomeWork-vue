@@ -50,7 +50,7 @@ onMounted(() => {
               class="form-control"
               id="username"
               placeholder="name@example.com"
-              v-model="user.username"
+              v-model.trim.lazy="user.username"
               required
               autofocus
             />
@@ -62,7 +62,7 @@ onMounted(() => {
               class="form-control"
               id="password"
               placeholder="Password"
-              v-model="user.password"
+              v-model.trim.lazy="user.password"
               required
             />
             <label for="password">Password</label>
