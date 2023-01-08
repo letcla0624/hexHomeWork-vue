@@ -3,5 +3,5 @@ import LoginComponent from "@/components/LoginComponent.vue";
 </script>
 
 <template>
-  <LoginComponent />
+  <LoginComponent routeName="week2" :routePath="`week2/products`" />
 </template>

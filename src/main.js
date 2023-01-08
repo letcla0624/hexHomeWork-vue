@@ -25,11 +25,11 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  function (response) {
+  (res) => {
     NProgress.done();
-    return response;
+    return res;
   },
-  function (error) {
+  (error) => {
     return Promise.reject(error);
   }
 );

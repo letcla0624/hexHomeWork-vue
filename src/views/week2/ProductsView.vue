@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { reactive, inject, onMounted } from "vue";
+import LogOutComponent from "@/components/LogOutComponent.vue";
 
 const axios = inject("axios");
 const router = useRouter();
@@ -32,20 +33,6 @@ const getProducts = async () => {
   }
 };
 
-const logOut = async () => {
-  try {
-    const res = await axios.post(`${import.meta.env.VITE_APP_API}/logout`);
-    alert(res.data.message);
-    router.push(backToHome);
-
-    // 刪除 token
-    document.cookie =
-      "hexHomeWorkToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-  } catch (err) {
-    alert(err.response.data.message);
-  }
-};
-
 onMounted(() => {
   const AUTH_TOKEN = document.cookie.replace(
     /(?:(?:^|.*;\s*)hexHomeWorkToken\s*=\s*([^;]*).*$)|^.*$/,
@@ -62,9 +49,7 @@ onMounted(() => {
       <div class="col-md-6">
         <div class="d-flex justify-content-between align-items-center">
           <h2 class="mb-0">產品列表</h2>
-          <button type="button" class="btn btn-outline-primary" @click="logOut">
-            登出
-          </button>
+          <LogOutComponent routeName="week2" />
         </div>
         <table class="table table-hover mt-4">
           <thead>

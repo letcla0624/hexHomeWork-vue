@@ -5,6 +5,17 @@ import { reactive, inject, onMounted } from "vue";
 const axios = inject("axios");
 const router = useRouter();
 
+const props = defineProps({
+  routeName: {
+    type: String,
+    default: "",
+  },
+  routePath: {
+    type: String,
+    default: "",
+  },
+});
+
 const user = reactive({
   username: "",
   password: "",
@@ -21,7 +32,7 @@ const login = async () => {
       expired
     )};`;
     alert(res.data.message);
-    router.push({ name: "week2/products" });
+    router.push({ name: `${props.routePath}` });
   } catch (err) {
     alert(err.response.data.message);
   }
@@ -31,9 +42,9 @@ onMounted(() => {
   // 判斷有沒有token
   const token = `${document.cookie}`;
   if (token) {
-    router.push({ name: "week2/products" });
+    router.push({ name: `${props.routePath}` });
   } else {
-    router.push({ name: "week2" });
+    router.push({ name: `${props.routeName}` });
   }
 });
 </script>

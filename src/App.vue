@@ -18,6 +18,6 @@ body {
 }
 #nprogress .bar {
   background: var(--bs-primary) !important;
-  height: 6px !important;
+  height: 4px !important;
 }
 </style>
