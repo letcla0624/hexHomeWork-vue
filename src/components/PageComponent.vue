@@ -29,9 +29,16 @@ const updatePage = (page) => {
         class="page-item"
         :class="{ active: props.pages.obj.current_page === page }"
       >
-        <a class="page-link" href="#" @click.prevent="updatePage(page)">{{
-          page
-        }}</a>
+        <span v-if="page === props.pages.obj.current_page" class="page-link">
+          {{ page }}
+        </span>
+        <a
+          v-else
+          class="page-link"
+          href="#"
+          @click.prevent="updatePage(page)"
+          >{{ page }}</a
+        >
       </li>
       <li class="page-item" :class="{ disabled: !props.pages.obj.has_next }">
         <a
