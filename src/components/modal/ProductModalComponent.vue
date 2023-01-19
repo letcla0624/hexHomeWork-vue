@@ -47,13 +47,45 @@ export default {
       }
     };
 
+    const fileInput = ref(null);
+    const statusLoading = ref(false);
+    const uploadFileFn = async () => {
+      statusLoading.value = true;
+      const formData = new FormData();
+      formData.append("file-to-upload", fileInput.value.files[0]);
+
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_APP_API}/api/${
+            import.meta.env.VITE_APP_PATH
+          }/admin/upload`,
+          formData
+        );
+        tempProduct.obj.imageUrl = res.data.imageUrl;
+        statusLoading.value = false;
+        res.data.success ? alert("上傳成功") : alert("上傳失敗");
+        fileInput.value.value = "";
+      } catch (err) {
+        statusLoading.value = false;
+        console.dir(err.response);
+      }
+    };
+
     onMounted(() => {
       prodModal = new bootstrap.Modal(productModal.value, {
         keyboard: false,
       });
     });
 
-    return { tempProduct, props, productModal, updateProductFn };
+    return {
+      tempProduct,
+      props,
+      productModal,
+      updateProductFn,
+      fileInput,
+      uploadFileFn,
+      statusLoading,
+    };
   },
 };
 </script>
@@ -70,7 +102,6 @@ export default {
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
           <h5 id="productModalLabel" class="modal-title">
-            <!-- <span>新增產品</span> -->
             {{ props.isNew ? "新增產品" : "編輯商品" }}
           </h5>
           <button
@@ -92,6 +123,25 @@ export default {
                   placeholder="請輸入圖片連結"
                 />
                 <img class="img-fluid" :src="tempProduct.obj.imageUrl" />
+              </div>
+              <div class="mb-3">
+                <label for="fileInput" class="form-label"
+                  >或 上傳圖片
+                  <i
+                    v-if="statusLoading"
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </i>
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="fileInput"
+                  ref="fileInput"
+                  @change="uploadFileFn"
+                />
               </div>
               <h3 class="mb-3">多圖新增</h3>
               <div v-if="Array.isArray(tempProduct.obj.imagesUrl)">
@@ -199,6 +249,19 @@ export default {
                     min="0"
                     class="form-control"
                     placeholder="請輸入售價"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="price" class="form-label">庫存數量</label>
+                  <input
+                    id="price"
+                    v-model.number="tempProduct.obj.in_stock"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    placeholder="請輸入庫存數量"
                   />
                 </div>
               </div>
