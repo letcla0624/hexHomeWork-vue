@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
+import { useCheckToken } from "@/composables/useCheckToken.js";
 import LogOutComponent from "@/components/LogOutComponent.vue";
 import PageComponent from "@/components/PageComponent.vue";
 import ProductModalComponent, {
@@ -23,7 +24,7 @@ const checkAdmin = async () => {
     getProducts();
   } catch (err) {
     alert(err.response.data.message);
-    router.push({ name: "week3" });
+    router.push({ name: "week4" });
   }
 };
 
@@ -65,12 +66,7 @@ const openModal = (txt, product) => {
 };
 
 onMounted(() => {
-  const AUTH_TOKEN = document.cookie.replace(
-    /(?:(?:^|.*;\s*)hexHomeWorkToken\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-  );
-  axios.defaults.headers.common.Authorization = AUTH_TOKEN;
-
+  useCheckToken();
   checkAdmin();
 });
 </script>

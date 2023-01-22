@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
+import { useCheckToken } from "@/composables/useCheckToken.js";
 import LogOutComponent from "@/components/LogOutComponent.vue";
 import ProductModalComponent, {
   prodModal,
@@ -61,12 +62,7 @@ const openModal = (txt, product) => {
 };
 
 onMounted(() => {
-  const AUTH_TOKEN = document.cookie.replace(
-    /(?:(?:^|.*;\s*)hexHomeWorkToken\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-  );
-  axios.defaults.headers.common.Authorization = AUTH_TOKEN;
-
+  useCheckToken();
   checkAdmin();
 });
 </script>

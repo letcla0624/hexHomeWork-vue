@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { reactive, inject, onMounted } from "vue";
 import LogOutComponent from "@/components/LogOutComponent.vue";
+import { useCheckToken } from "@/composables/useCheckToken.js";
 
 const axios = inject("axios");
 const router = useRouter();
@@ -34,11 +35,7 @@ const getProducts = async () => {
 };
 
 onMounted(() => {
-  const AUTH_TOKEN = document.cookie.replace(
-    /(?:(?:^|.*;\s*)hexHomeWorkToken\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-  );
-  axios.defaults.headers.common.Authorization = AUTH_TOKEN;
+  useCheckToken();
   checkAdmin();
 });
 </script>
