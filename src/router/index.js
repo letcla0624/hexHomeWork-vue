@@ -7,6 +7,7 @@ import Week3HomeView from "@/views/week3/Week3HomeView.vue";
 import EditProductsView from "@/views/week3/EditProductsView.vue";
 import Week4HomeView from "@/views/week4/Week4HomeView.vue";
 import EditProductsPageView from "@/views/week4/EditProductsPageView.vue";
+import FrontCartView from "@/views/week5/FrontCartView.vue";
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
         component: EditProductsPageView,
       },
     ],
+  },
+  {
+    path: "/week5",
+    name: "week5/frontCart",
+    component: FrontCartView,
   },
 ];
 

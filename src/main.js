@@ -6,6 +6,7 @@ import router from "./router";
 
 import "./assets/scss/all.scss";
 import * as bootstrap from "bootstrap";
+import "bootstrap-icons/font/bootstrap-icons.css";
 window.bootstrap = bootstrap;
 
 import NProgress from "nprogress";
@@ -13,6 +14,22 @@ import "nprogress/nprogress.css";
 
 import axios from "axios";
 import VueAxios from "vue-axios";
+
+import { defineRule, Form, Field, ErrorMessage, configure } from "vee-validate";
+import AllRules from "@vee-validate/rules";
+import { localize, setLocale } from "@vee-validate/i18n";
+import zh_tw from "@vee-validate/i18n/dist/locale/zh_TW.json";
+
+Object.keys(AllRules).forEach((rule) => {
+  defineRule(rule, AllRules[rule]);
+});
+
+configure({
+  generateMessage: localize({ tw: zh_tw }),
+  validateOnInput: true,
+});
+
+setLocale("tw");
 
 axios.interceptors.request.use(
   (config) => {
@@ -45,5 +62,9 @@ app.use(router);
 
 app.use(VueAxios, axios);
 app.provide("axios", app.config.globalProperties.axios);
+
+app.component("VForm", Form);
+app.component("VField", Field);
+app.component("ErrorMessage", ErrorMessage);
 
 app.mount("#app");
