@@ -12,6 +12,9 @@ window.bootstrap = bootstrap;
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
+import { LoadingPlugin } from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
+
 import axios from "axios";
 import VueAxios from "vue-axios";
 
@@ -59,6 +62,8 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
+
+app.use(LoadingPlugin);
 
 app.use(VueAxios, axios);
 app.provide("axios", app.config.globalProperties.axios);
