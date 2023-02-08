@@ -18,8 +18,16 @@ export default {
   setup(props, { emit }) {
     const productModal = ref(null);
     const qty = ref(1);
+
     const addToCart = (id, qty) => {
       emit("add-to-cart", id, qty);
+      defaultQty();
+    };
+
+    const defaultQty = () => {
+      setTimeout(() => {
+        qty.value = 1;
+      }, 2000);
     };
 
     onMounted(() => {

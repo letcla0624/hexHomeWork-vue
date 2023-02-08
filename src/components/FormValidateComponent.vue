@@ -23,7 +23,7 @@ const data = reactive({
 
 const isPhone = (value) => {
   const phoneNumber = /^(09)[0-9]{8}$/;
-  return phoneNumber.test(value) ? true : "需要正確的電話號碼";
+  return phoneNumber.test(value) ? true : "需要輸入正確的手機格式";
 };
 
 const createOrder = async () => {
@@ -91,7 +91,7 @@ const createOrder = async () => {
         <v-field
           id="tel"
           name="收件人電話"
-          type="text"
+          type="tel"
           class="form-control"
           :class="{ 'is-invalid': errors['收件人電話'] }"
           placeholder="請輸入電話"

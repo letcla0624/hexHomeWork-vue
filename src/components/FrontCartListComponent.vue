@@ -77,7 +77,10 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div>
+  <h2 v-if="cart.arr.total === 0" class="h3 text-center mt-5">
+    目前購物車沒有東西喔~ 趕快去購物吧~(๑•̀ㅂ•́)و✧
+  </h2>
+  <div v-else>
     <div class="text-end">
       <button
         class="btn btn-outline-danger"
@@ -147,13 +150,15 @@ onMounted(() => {
               </div>
             </td>
             <td class="text-end">
-              <small
-                v-if="item.product.origin_price !== item.product.price"
-                class="text-success"
-              >
-                折扣價：
-              </small>
-              ${{ item.final_total }}
+              <div v-if="item.product.origin_price !== item.product.price">
+                <small class="text-secondary">
+                  <del>原價： ${{ item.product.origin_price * item.qty }}</del>
+                </small>
+                <br />
+                <small class="text-success"> 折扣價： </small>
+                ${{ item.final_total }}
+              </div>
+              <div v-else>${{ item.final_total }}</div>
             </td>
           </tr>
         </template>
