@@ -37,6 +37,9 @@ import { RouterLink } from "vue-router";
             <li class="nav-item">
               <RouterLink to="/week5" class="nav-link">week5</RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink to="/week6" class="nav-link">week6</RouterLink>
+            </li>
           </ul>
         </div>
       </div>
