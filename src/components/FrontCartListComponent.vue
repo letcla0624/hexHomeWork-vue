@@ -105,6 +105,7 @@ onMounted(() => {
           <th>品名</th>
           <th style="width: 150px">數量/單位</th>
           <th class="text-end">單價</th>
+          <th class="text-end">總計</th>
         </tr>
       </thead>
       <tbody>
@@ -152,17 +153,22 @@ onMounted(() => {
             <td class="text-end">
               <div v-if="item.product.origin_price !== item.product.price">
                 <small class="text-secondary">
-                  <del
-                    >原價： ${{ item.product.origin_price }} x {{ item.qty }} =
-                    ${{ item.product.origin_price * item.qty }}
-                  </del>
+                  <del>原價： ${{ item.product.origin_price }} </del>
                 </small>
                 <br />
                 <small class="text-success">
-                  折扣價： ${{ item.product.price }} x {{ item.qty }} = ${{
-                    item.final_total
-                  }}
+                  折扣價： ${{ item.product.price }}
                 </small>
+              </div>
+              <div v-else>${{ item.final_total }}</div>
+            </td>
+            <td class="text-end">
+              <div v-if="item.product.origin_price !== item.product.price">
+                <small class="text-secondary">
+                  <del>${{ item.product.origin_price * item.qty }} </del>
+                </small>
+                <br />
+                <small class="text-success"> ${{ item.final_total }} </small>
               </div>
               <div v-else>${{ item.final_total }}</div>
             </td>
@@ -171,12 +177,8 @@ onMounted(() => {
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="3" class="text-end">總計</td>
+          <td colspan="4" class="text-end">總計</td>
           <td class="text-end">${{ cart.arr.total }}</td>
-        </tr>
-        <tr v-if="cart.arr.final_total !== cart.arr.total">
-          <td colspan="3" class="text-end text-success">折扣價</td>
-          <td class="text-end text-success">{{ cart.arr.final_total }}</td>
         </tr>
       </tfoot>
     </table>
