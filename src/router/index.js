@@ -14,6 +14,7 @@ import Week6ProductsView from "@/views/week6/front/ProductsView.vue";
 import Week6ProdView from "@/views/week6/front/ProdView.vue";
 import Week6CartView from "@/views/week6/front/CartView.vue";
 import Week6LoginView from "@/views/week6/front/LoginView.vue";
+import Week6PageNotFoundView from "@/views/week6/front/PageNotFoundView.vue";
 import DashboardView from "@/views/week6/DashboardView.vue";
 import Week6AdminProductsView from "@/views/week6/admin/AdminProductsView.vue";
 import Week6AdminOrdersView from "@/views/week6/admin/AdminOrdersView.vue";
@@ -99,6 +100,11 @@ const routes = [
         path: "login",
         name: "week6/login",
         component: Week6LoginView,
+      },
+      {
+        path: "/:pathMatch(.*)*",
+        name: "week6/404",
+        component: Week6PageNotFoundView,
       },
     ],
   },

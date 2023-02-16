@@ -152,11 +152,17 @@ onMounted(() => {
             <td class="text-end">
               <div v-if="item.product.origin_price !== item.product.price">
                 <small class="text-secondary">
-                  <del>原價： ${{ item.product.origin_price * item.qty }}</del>
+                  <del
+                    >原價： ${{ item.product.origin_price }} x {{ item.qty }} =
+                    ${{ item.product.origin_price * item.qty }}
+                  </del>
                 </small>
                 <br />
-                <small class="text-success"> 折扣價： </small>
-                ${{ item.final_total }}
+                <small class="text-success">
+                  折扣價： ${{ item.product.price }} x {{ item.qty }} = ${{
+                    item.final_total
+                  }}
+                </small>
               </div>
               <div v-else>${{ item.final_total }}</div>
             </td>
