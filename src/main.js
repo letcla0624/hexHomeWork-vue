@@ -9,6 +9,8 @@ import * as bootstrap from "bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 window.bootstrap = bootstrap;
 
+import CKEditor from "@ckeditor/ckeditor5-vue";
+
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
@@ -64,6 +66,7 @@ app.use(createPinia());
 app.use(router);
 
 app.use(LoadingPlugin);
+app.use(CKEditor);
 
 app.use(VueAxios, axios);
 app.provide("axios", app.config.globalProperties.axios);

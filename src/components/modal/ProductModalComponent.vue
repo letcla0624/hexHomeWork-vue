@@ -71,6 +71,29 @@ export default {
       }
     };
 
+    const statusArrLoading = ref(false);
+    const uploadFileArrFn = async () => {
+      statusArrLoading.value = true;
+      const formData = new FormData();
+      formData.append("file-to-upload", fileInput.value.files[0]);
+
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_APP_API}/api/${
+            import.meta.env.VITE_APP_PATH
+          }/admin/upload`,
+          formData
+        );
+        tempProduct.obj.imagesUrl.push(res.data.imageUrl);
+        statusArrLoading.value = false;
+        res.data.success ? alert("上傳成功") : alert("上傳失敗");
+        fileInput.value.value = "";
+      } catch (err) {
+        statusArrLoading.value = false;
+        console.dir(err.response);
+      }
+    };
+
     onMounted(() => {
       prodModal = new bootstrap.Modal(productModal.value, {
         keyboard: false,
@@ -84,7 +107,9 @@ export default {
       updateProductFn,
       fileInput,
       uploadFileFn,
+      uploadFileArrFn,
       statusLoading,
+      statusArrLoading,
     };
   },
 };
@@ -106,7 +131,7 @@ export default {
           </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
@@ -161,28 +186,24 @@ export default {
                   </div>
                   <img class="img-fluid" :src="image" />
                 </div>
-                <div
-                  v-if="
-                    !tempProduct.obj.imagesUrl.length ||
-                    tempProduct.obj.imagesUrl[
-                      tempProduct.obj.imagesUrl.length - 1
-                    ]
-                  "
-                >
-                  <button
-                    class="btn btn-outline-primary btn-sm d-block w-100"
-                    @click="tempProduct.obj.imagesUrl.push('')"
-                  >
-                    新增圖片
-                  </button>
-                </div>
-                <div v-else>
-                  <button
-                    class="btn btn-outline-danger btn-sm d-block w-100"
-                    @click="tempProduct.obj.imagesUrl.pop()"
-                  >
-                    刪除圖片
-                  </button>
+                <div class="mb-3">
+                  <label for="fileInput" class="form-label"
+                    >上傳圖片
+                    <i
+                      v-if="statusArrLoading"
+                      class="spinner-border spinner-border-sm text-primary"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </i>
+                  </label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="fileInput"
+                    ref="fileInput"
+                    @change="uploadFileArrFn"
+                  />
                 </div>
               </div>
               <div v-else>

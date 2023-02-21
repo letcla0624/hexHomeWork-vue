@@ -15,9 +15,15 @@ import Week6ProdView from "@/views/week6/front/ProdView.vue";
 import Week6CartView from "@/views/week6/front/CartView.vue";
 import Week6LoginView from "@/views/week6/front/LoginView.vue";
 import Week6PageNotFoundView from "@/views/week6/front/PageNotFoundView.vue";
-import DashboardView from "@/views/week6/DashboardView.vue";
+import Week6DashboardView from "@/views/week6/DashboardView.vue";
 import Week6AdminProductsView from "@/views/week6/admin/AdminProductsView.vue";
 import Week6AdminOrdersView from "@/views/week6/admin/AdminOrdersView.vue";
+import Week7LoginView from "@/views/week7/LoginView.vue";
+import Week7DashboardView from "@/views/week7/DashboardView.vue";
+import Week7AdminProductsView from "@/views/week7/admin/AdminProductsView.vue";
+import Week7AdminOrdersView from "@/views/week7/admin/AdminOrdersView.vue";
+import Week7AdminCouponsView from "@/views/week7/admin/AdminCouponsView.vue";
+import Week7AdminArticlesView from "@/views/week7/admin/AdminArticlesView.vue";
 
 const routes = [
   {
@@ -110,7 +116,7 @@ const routes = [
   },
   {
     path: "/week6/admin",
-    component: DashboardView,
+    component: Week6DashboardView,
     children: [
       {
         path: "",
@@ -120,6 +126,34 @@ const routes = [
       {
         path: "orders",
         component: Week6AdminOrdersView,
+      },
+    ],
+  },
+  {
+    path: "/week7/login",
+    name: "week7/login",
+    component: Week7LoginView,
+  },
+  {
+    path: "/week7/admin",
+    component: Week7DashboardView,
+    children: [
+      {
+        path: "",
+        name: "week7/admin",
+        component: Week7AdminProductsView,
+      },
+      {
+        path: "orders",
+        component: Week7AdminOrdersView,
+      },
+      {
+        path: "coupons",
+        component: Week7AdminCouponsView,
+      },
+      {
+        path: "blogs",
+        component: Week7AdminArticlesView,
       },
     ],
   },
