@@ -94,6 +94,12 @@ export default {
       }
     };
 
+    const removeInputText = (idx) => {
+      confirm("確認刪除？")
+        ? tempProduct.obj.imagesUrl.splice(idx, 1)
+        : tempProduct.obj.imagesUrl;
+    };
+
     onMounted(() => {
       prodModal = new bootstrap.Modal(productModal.value, {
         keyboard: false,
@@ -110,6 +116,7 @@ export default {
       uploadFileArrFn,
       statusLoading,
       statusArrLoading,
+      removeInputText,
     };
   },
 };
@@ -172,17 +179,29 @@ export default {
               <div v-if="Array.isArray(tempProduct.obj.imagesUrl)">
                 <div
                   class="mb-1"
-                  v-for="(image, key) in tempProduct.obj.imagesUrl"
-                  :key="key"
+                  v-for="(image, idx) in tempProduct.obj.imagesUrl"
+                  :key="idx"
                 >
-                  <div class="mb-3">
+                  <div
+                    v-if="tempProduct.obj.imagesUrl[idx] !== ''"
+                    class="mb-3"
+                  >
                     <label for="imageUrl" class="form-label">圖片網址</label>
-                    <input
-                      v-model="tempProduct.obj.imagesUrl[key]"
-                      type="text"
-                      class="form-control"
-                      placeholder="請輸入圖片連結"
-                    />
+                    <div class="input-group">
+                      <input
+                        v-model="tempProduct.obj.imagesUrl[idx]"
+                        type="text"
+                        class="form-control"
+                        placeholder="請輸入圖片連結"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @click="removeInputText(idx)"
+                      >
+                        <span class="btn-close"></span>
+                      </button>
+                    </div>
                   </div>
                   <img class="img-fluid" :src="image" />
                 </div>
