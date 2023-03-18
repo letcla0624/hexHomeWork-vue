@@ -46,6 +46,7 @@ const openModal = (txt, product) => {
     isNew.value = true;
     tempProduct.obj = {
       imagesUrl: [],
+      in_stock: 0,
     };
     prodModal.show();
   } else if (txt === "edit") {

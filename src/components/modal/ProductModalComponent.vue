@@ -17,11 +17,14 @@ export default {
   },
   emits: ["get-prods"],
   setup(props, { emit }) {
-    const tempProduct = reactive({ obj: {} });
+    const tempProduct = reactive({ obj: { setSize: [] } });
     const productModal = ref(null);
 
     watch(props.adminProd, () => {
-      tempProduct.obj = props.adminProd.obj;
+      tempProduct.obj = {
+        ...props.adminProd.obj,
+        setSize: props.adminProd.obj.setSize || [],
+      };
     });
 
     const updateProductFn = async () => {
@@ -47,6 +50,7 @@ export default {
       }
     };
 
+    // 主圖上傳
     const fileInput = ref(null);
     const statusLoading = ref(false);
     const uploadFileFn = async () => {
@@ -59,8 +63,14 @@ export default {
           `${import.meta.env.VITE_APP_API}/api/${
             import.meta.env.VITE_APP_PATH
           }/admin/upload`,
-          formData
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
+
         tempProduct.obj.imageUrl = res.data.imageUrl;
         statusLoading.value = false;
         res.data.success ? alert("上傳成功") : alert("上傳失敗");
@@ -71,11 +81,13 @@ export default {
       }
     };
 
+    // 多圖上傳
+    const fileInputs = ref(null);
     const statusArrLoading = ref(false);
     const uploadFileArrFn = async () => {
       statusArrLoading.value = true;
       const formData = new FormData();
-      formData.append("file-to-upload", fileInput.value.files[0]);
+      formData.append("file-to-upload", fileInputs.value.files[0]);
 
       try {
         const res = await axios.post(
@@ -84,10 +96,11 @@ export default {
           }/admin/upload`,
           formData
         );
+
         tempProduct.obj.imagesUrl.push(res.data.imageUrl);
         statusArrLoading.value = false;
         res.data.success ? alert("上傳成功") : alert("上傳失敗");
-        fileInput.value.value = "";
+        fileInputs.value.value = "";
       } catch (err) {
         statusArrLoading.value = false;
         console.dir(err.response);
@@ -112,6 +125,7 @@ export default {
       productModal,
       updateProductFn,
       fileInput,
+      fileInputs,
       uploadFileFn,
       uploadFileArrFn,
       statusLoading,
@@ -206,7 +220,7 @@ export default {
                   <img class="img-fluid" :src="image" />
                 </div>
                 <div class="mb-3">
-                  <label for="fileInput" class="form-label"
+                  <label for="fileInputs" class="form-label"
                     >上傳圖片
                     <i
                       v-if="statusArrLoading"
@@ -219,8 +233,8 @@ export default {
                   <input
                     type="file"
                     class="form-control"
-                    id="fileInput"
-                    ref="fileInput"
+                    id="fileInputs"
+                    ref="fileInputs"
                     @change="uploadFileArrFn"
                   />
                 </div>
@@ -243,6 +257,36 @@ export default {
                   class="form-control"
                   placeholder="請輸入標題"
                   v-model="tempProduct.obj.title"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="enTitle" class="form-label">enTitle</label>
+                <input
+                  id="enTitle"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入英文標題"
+                  v-model="tempProduct.obj.enTitle"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="subtitle" class="form-label">副標題</label>
+                <input
+                  id="subtitle"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入副標題"
+                  v-model="tempProduct.obj.subtitle"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="enSubtitle" class="form-label">enSubtitle</label>
+                <input
+                  id="enSubtitle"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入英文副標題"
+                  v-model="tempProduct.obj.enSubtitle"
                 />
               </div>
               <div class="row">
@@ -294,19 +338,230 @@ export default {
               </div>
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label for="price" class="form-label">庫存數量</label>
+                  <label for="origin_enPrice" class="form-label">
+                    origin_enPrice
+                  </label>
                   <input
-                    id="price"
+                    id="origin_enPrice"
+                    v-model.number="tempProduct.obj.origin_enPrice"
+                    type="number"
+                    step="0.01"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    min="0.00"
+                    class="form-control"
+                    placeholder="請輸入美金原價"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="enPrice" class="form-label">enPrice</label>
+                  <input
+                    id="enPrice"
+                    v-model.number="tempProduct.obj.enPrice"
+                    type="number"
+                    step="0.01"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    min="0.00"
+                    class="form-control"
+                    placeholder="請輸入美金售價"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="inStock" class="form-label">庫存數量</label>
+                  <input
+                    id="inStock"
                     v-model.number="tempProduct.obj.in_stock"
                     type="number"
                     min="0"
+                    oninput="if(value<0)value=0;"
                     class="form-control"
                     placeholder="請輸入庫存數量"
                   />
                 </div>
+                <div class="mb-3 col-md-6">
+                  <label for="productNumber" class="form-label">商品編號</label>
+                  <input
+                    id="productNumber"
+                    v-model.number="tempProduct.obj.product_number"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入商品編號"
+                  />
+                </div>
               </div>
-              <hr />
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="madePlace" class="form-label">製造地</label>
+                  <input
+                    id="madePlace"
+                    v-model.number="tempProduct.obj.made_place"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入製造地"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="productVolume" class="form-label">體積尺寸</label>
+                  <input
+                    id="productVolume"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入商品體積"
+                    v-model="tempProduct.obj.product_volume"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="made_enPlace" class="form-label">
+                    made_enPlace
+                  </label>
+                  <input
+                    id="made_enPlace"
+                    v-model.number="tempProduct.obj.made_enPlace"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入英文製造地"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="product_enVolume" class="form-label">
+                    product_enVolume
+                  </label>
+                  <input
+                    id="product_enVolume"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入英文商品體積"
+                    v-model="tempProduct.obj.product_enVolume"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="productMaterial" class="form-label">成分</label>
+                  <input
+                    id="productMaterial"
+                    v-model.number="tempProduct.obj.product_material"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入商品成分"
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="productColors" class="form-label">顏色</label>
+                  <input
+                    id="productColors"
+                    v-model.number="tempProduct.obj.product_colors"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入商品顏色"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="product_enMaterial" class="form-label">
+                    product_enMaterial
+                  </label>
+                  <input
+                    id="product_enMaterial"
+                    v-model.number="tempProduct.obj.product_enMaterial"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入英文商品成分"
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="product_enColors" class="form-label">
+                    product_enColors
+                  </label>
+                  <input
+                    id="product_enColors"
+                    v-model.number="tempProduct.obj.product_enColors"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入英文商品顏色"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="videoId" class="form-label">廣告影片 ID</label>
+                  <input
+                    id="videoId"
+                    v-model.number="tempProduct.obj.videoId"
+                    type="number"
+                    class="form-control"
+                    placeholder="請輸入廣告影片 ID"
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="whichModel" class="form-label"
+                    >模特穿搭號碼</label
+                  >
+                  <input
+                    id="whichModel"
+                    v-model.number="tempProduct.obj.which_model"
+                    type="number"
+                    class="form-control"
+                    placeholder="請輸入模特穿搭號碼"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="setSize" class="form-label">設定尺寸</label>
+                <div class="row gx-1 mb-3">
+                  <div
+                    class="col-md-2 mb-1"
+                    v-for="(label, key) in tempProduct.obj.setSize"
+                    :key="key"
+                  >
+                    <div class="input-group input-group-sm">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="setSize"
+                        v-model="tempProduct.obj.setSize[key]"
+                        placeholder="請輸入標籤"
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        @click="tempProduct.obj.setSize.splice(key, 1)"
+                      >
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md-2 mb-1"
+                    v-if="
+                      tempProduct.obj.setSize[
+                        tempProduct.obj.setSize.length - 1
+                      ] || !tempProduct.obj.setSize.length
+                    "
+                  >
+                    <button
+                      class="btn btn-outline-primary btn-sm d-block w-100"
+                      type="button"
+                      @click="tempProduct.obj.setSize.push('')"
+                    >
+                      新增標籤
+                    </button>
+                  </div>
+                </div>
+              </div>
 
+              <hr />
               <div class="mb-3">
                 <label for="description" class="form-label">產品描述</label>
                 <textarea
@@ -315,17 +570,45 @@ export default {
                   type="text"
                   class="form-control"
                   placeholder="請輸入產品描述"
+                  rows="6"
+                >
+                </textarea>
+              </div>
+              <div class="mb-3">
+                <label for="enDescription" class="form-label">
+                  enDescription
+                </label>
+                <textarea
+                  id="enDescription"
+                  v-model="tempProduct.obj.enDescription"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入英文產品描述"
+                  rows="6"
                 >
                 </textarea>
               </div>
               <div class="mb-3">
                 <label for="content" class="form-label">說明內容</label>
                 <textarea
-                  id="description"
+                  id="content"
                   v-model="tempProduct.obj.content"
                   type="text"
                   class="form-control"
                   placeholder="請輸入說明內容"
+                  rows="6"
+                >
+                </textarea>
+              </div>
+              <div class="mb-3">
+                <label for="enContent" class="form-label">enContent</label>
+                <textarea
+                  id="enContent"
+                  v-model="tempProduct.obj.enContent"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入英文說明內容"
+                  rows="6"
                 >
                 </textarea>
               </div>
@@ -367,4 +650,5 @@ export default {
     </div>
   </div>
 </template>
-<style lang=""></style>
+
+<style lang="scss"></style>

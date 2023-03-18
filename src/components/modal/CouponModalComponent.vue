@@ -28,7 +28,7 @@ export default {
       const dateAndTime = new Date(tempCoupon.obj.due_date * 1000)
         .toISOString()
         .split("T");
-      [due_date.value] = dateAndTime;
+      due_date.value = dateAndTime[0];
     });
 
     watch(due_date, () => {
@@ -117,6 +117,8 @@ export default {
               class="form-control"
               id="price"
               min="0"
+              max="100"
+              oninput="if(value<0)value=0; else if(value>100)value=100;"
               v-model.number="tempCoupon.obj.percent"
               placeholder="請輸入折扣百分比"
             />

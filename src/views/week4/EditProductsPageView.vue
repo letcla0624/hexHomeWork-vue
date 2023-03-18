@@ -123,7 +123,7 @@ onMounted(() => {
         </tr>
       </tbody>
     </table>
-    <PageComponent :pages="pagination" @emitPage="getProducts" />
+    <PageComponent :pages="pagination" @emit-page="getProducts" />
   </div>
 
   <ProductModalComponent

@@ -126,12 +126,15 @@ onMounted(() => {
             <td>
               <ul class="list-unstyled">
                 <li v-for="(product, i) in order.products" :key="i">
-                  {{ product.product.title }} 數量：{{ product.qty }}
+                  {{ product.product.title }} 尺寸：{{
+                    product.setSize
+                  }}
+                  數量：{{ product.qty }}
                   {{ product.product.unit }}
                 </li>
               </ul>
             </td>
-            <td class="text-end">${{ order.total }}</td>
+            <td class="text-end">NT${{ order.total }}</td>
             <td>
               <div class="form-check form-switch d-flex justify-content-end">
                 <input
